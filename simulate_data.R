@@ -1,3 +1,5 @@
+
+library(doipkg)
 num_agents <- 100
 
 # Generate data
@@ -16,41 +18,8 @@ original_data <- data.frame(
   Baseline_PA = baseline_PA
 )
 
-#Calculate the similarities between two agents
-#method 1 Cosine Similarity for numerical demographic # c(25, 0, 2, 1)  # Example: age=25, female, high SES, baseline_PA achieved
-#method 2.  Hamming Distance for categorical data #individual1 <- c(0, 2, 1)  # Female, high SES, achieved PA goal
-#method 3.  Euclidean Distance for mixed data #individual1 <- c(25, 0, 2)  # Age=25, female, high SES
-#method 4.Jaccard Similarity for Binary data #individual1 <- c(1, 0, 1, 1)  # Binary vector for individual 1
 # Initialize the similarity matrix
 similarity_matrix <- matrix(0, nrow = num_agents, ncol = num_agents)
-
-# Function to calculate similarity between two individuals
-calculate_similarity <- function(individual1, individual2, method = "Cosine") {
-  if (method == "Cosine") {
-    # Calculate cosine similarity
-    cosine_similarity <- sum(individual1 * individual2) / 
-      (sqrt(sum(individual1^2)) * sqrt(sum(individual2^2)))
-    return(cosine_similarity)
-    
-  } else if (method == "Hamming") {
-    # Calculate Hamming distance and convert to similarity
-    hamming_distance <- sum(individual1 != individual2)
-    return(hamming_distance) 
-    
-  } else if (method == "Euclidean") {
-    # Calculate Euclidean distance and convert to similarity
-    euclidean_distance <- sqrt(sum((individual1 - individual2)^2))
-    return(euclidean_distance)  # Convert to similarity in range [0,1]
-    
-  } else if (method == "Jaccard") {
-    # Calculate Jaccard similarity
-    jaccard_similarity <- sum(individual1 & individual2) / sum(individual1 | individual2)
-    return(jaccard_similarity)
-    
-  } else {
-    stop("Invalid method. Choose 'Cosine', 'Hamming', 'Euclidean', or 'Jaccard'.")
-  }
-}
 
 # Loop through each pair of individuals to populate the similarity matrix
 for (i1 in 1:num_agents) {
@@ -60,7 +29,7 @@ for (i1 in 1:num_agents) {
     individual2 <- as.numeric(original_data[i2, -1])
     
     # Calculate similarity using the specified method (change method as needed)
-    similarity_matrix[i1, i2] <- calculate_similarity(individual1, individual2, method = "Euclidean")  
+    similarity_matrix[i1, i2] <- doipkg::calculate_similarity(individual1, individual2, method = "Euclidean") #this used the doipkg
   }
 }
 
@@ -70,8 +39,6 @@ max_val <- max(similarity_matrix)
 
 # Standardize the similarity matrix to range [0, 1]
 standardized_similarity_matrix <- (similarity_matrix - min_val) / (max_val - min_val)
-
-#Function 1. Prepare matrix for analysis
 
 #original matrix
 agent1 <- sample(1:num_agents, 100, replace = TRUE)
