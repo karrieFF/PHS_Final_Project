@@ -5,7 +5,7 @@ id <- seq(1, num_agents)
 gender <- sample(c(0, 1), num_agents, replace = TRUE)  # 0 represents female; 1 represents male
 age <- runif(num_agents, min = 18, max = 30)
 socio_economic_status <- sample(c(0, 1, 2), num_agents, replace = TRUE)  # 0 = low, 1 = middle, 2 = high
-baseline_PA <- sample(c(0, 1), num_agents, replace = TRUE)  # 0 = did not reach PA goal, 1 = reached PA goal
+baseline_PA <- runif(num_agents, min = 1000, max = 15000)  # 0 = did not reach PA goal, 1 = reached PA goal
 
 # Create the data frame
 original_data <- data.frame(
@@ -88,4 +88,4 @@ diag(adj_matrix) <- 0 # Remove self-loops
 
 #assign strength to the matrix
 final_matrix <- standardized_similarity_matrix * adj_matrix
-
+final_matrix
