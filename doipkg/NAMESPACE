@@ -2,3 +2,4 @@
 
 export(calculate_similarity)
 export(get_top_innovators)
+export(simulate_adoption)
